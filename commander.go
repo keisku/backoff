@@ -10,7 +10,7 @@ type Commander struct{ options }
 
 func NewCommander(opts ...option) Commander {
 	var (
-		defaultTimeout    = 1 * time.Minute
+		defaultTimeout    = 1*time.Minute + 5*time.Second
 		defaultmaxBackoff = 32 * time.Second
 		defaultDebugMode  = false
 		defaultErrPrint   = func(err error) {
