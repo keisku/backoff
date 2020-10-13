@@ -37,6 +37,7 @@ func DebugModeOn() Option {
 	}
 }
 
+// DebugPrint customizes how to print error
 func DebugPrint(f func(error)) Option {
 	return func(o *options) {
 		o.debugPrint = f
