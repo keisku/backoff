@@ -15,6 +15,7 @@ type options struct {
 
 type option func(*options)
 
+// Timeout is to exit the exponential backoff
 func Timeout(t time.Duration) option {
 	return func(o *options) {
 		o.timeout = t
