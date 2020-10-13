@@ -30,6 +30,7 @@ func MaxWaitTime(t time.Duration) Option {
 	}
 }
 
+// DebugModeOn enables to print logs
 func DebugModeOn() Option {
 	return func(o *options) {
 		o.debugMode = true
