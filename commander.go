@@ -10,10 +10,10 @@ type Commander struct{ options }
 
 func NewCommander(opts ...option) Commander {
 	var (
-		defaultTimeout    = 1*time.Minute + 5*time.Second
-		defaultmaxBackoff = 32 * time.Second
-		defaultDebugMode  = false
-		defaultErrPrint   = func(err error) {
+		defaultTimeout     = 1*time.Minute + 5*time.Second
+		defaultMaxWaitTime = 32 * time.Second
+		defaultDebugMode   = false
+		defaultErrPrint    = func(err error) {
 			fmt.Println(err)
 		}
 		defaultIgnoreError = func(error) bool { return false }
@@ -23,7 +23,7 @@ func NewCommander(opts ...option) Commander {
 	)
 	options := options{
 		timeout:     defaultTimeout,
-		maxBackoff:  defaultmaxBackoff,
+		maxWaitTime: defaultMaxWaitTime,
 		debugMode:   defaultDebugMode,
 		debugPrint:  defaultErrPrint,
 		ignoreError: defaultIgnoreError,
@@ -63,7 +63,7 @@ func (cmd Commander) backoffLoop(done chan struct{}, f func() error) {
 			return
 		}
 		exponentSecond := time.Duration(pow2(exponent)) * time.Second
-		d := min(exponentSecond+randomMilliSecond(), cmd.maxBackoff)
+		d := min(exponentSecond+randomMilliSecond(), cmd.maxWaitTime)
 		if cmd.debugMode {
 			cmd.debugPrint(err)
 			cmd.timePrint(d)

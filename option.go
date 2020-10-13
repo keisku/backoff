@@ -6,7 +6,7 @@ import (
 
 type options struct {
 	timeout     time.Duration
-	maxBackoff  time.Duration
+	maxWaitTime time.Duration
 	debugMode   bool
 	debugPrint  func(error)
 	ignoreError func(error) bool
@@ -15,16 +15,17 @@ type options struct {
 
 type option func(*options)
 
-// Timeout is to exit the exponential backoff
+// Timeout is to exit the backoff
 func Timeout(t time.Duration) option {
 	return func(o *options) {
 		o.timeout = t
 	}
 }
 
-func MaxBackoff(t time.Duration) option {
+// MaxWaitTime sets the maximum waiting time for the backoff interval
+func MaxWaitTime(t time.Duration) option {
 	return func(o *options) {
-		o.maxBackoff = t
+		o.maxWaitTime = t
 	}
 }
 
