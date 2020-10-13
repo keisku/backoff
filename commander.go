@@ -13,21 +13,21 @@ func NewCommander(opts ...option) Commander {
 		defaultTimeout    = 1 * time.Minute
 		defaultmaxBackoff = 32 * time.Second
 		defaultDebugMode  = false
-		defaultErrPrinter = func(err error) {
+		defaultErrPrint   = func(err error) {
 			fmt.Println(err)
 		}
 		defaultIgnoreError = func(error) bool { return false }
-		defaultTimePrinter = func(d time.Duration) {
+		defaultTimePrint   = func(d time.Duration) {
 			fmt.Printf("waiting %fs...\n", d.Seconds())
 		}
 	)
 	options := options{
-		timeout:      defaultTimeout,
-		maxBackoff:   defaultmaxBackoff,
-		debugMode:    defaultDebugMode,
-		debugPrinter: defaultErrPrinter,
-		ignoreError:  defaultIgnoreError,
-		timePrinter:  defaultTimePrinter,
+		timeout:     defaultTimeout,
+		maxBackoff:  defaultmaxBackoff,
+		debugMode:   defaultDebugMode,
+		debugPrint:  defaultErrPrint,
+		ignoreError: defaultIgnoreError,
+		timePrint:   defaultTimePrint,
 	}
 	for _, opt := range opts {
 		opt(&options)
@@ -57,7 +57,7 @@ func (cmd Commander) backoffLoop(done chan struct{}, f func() error) {
 		}
 		if cmd.ignoreError(err) {
 			if cmd.debugMode {
-				cmd.debugPrinter(err)
+				cmd.debugPrint(err)
 			}
 			done <- struct{}{}
 			return
@@ -65,8 +65,8 @@ func (cmd Commander) backoffLoop(done chan struct{}, f func() error) {
 		exponentSecond := time.Duration(pow2(exponent)) * time.Second
 		d := min(exponentSecond+randomMilliSecond(), cmd.maxBackoff)
 		if cmd.debugMode {
-			cmd.debugPrinter(err)
-			cmd.timePrinter(d)
+			cmd.debugPrint(err)
+			cmd.timePrint(d)
 		}
 		time.Sleep(d)
 		exponent++

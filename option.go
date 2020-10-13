@@ -5,12 +5,12 @@ import (
 )
 
 type options struct {
-	timeout      time.Duration
-	maxBackoff   time.Duration
-	debugMode    bool
-	debugPrinter func(error)
-	ignoreError  func(error) bool
-	timePrinter  func(time.Duration)
+	timeout     time.Duration
+	maxBackoff  time.Duration
+	debugMode   bool
+	debugPrint  func(error)
+	ignoreError func(error) bool
+	timePrint   func(time.Duration)
 }
 
 type option func(*options)
@@ -33,9 +33,9 @@ func DebugModeOn() option {
 	}
 }
 
-func DebugPrinter(f func(error)) option {
+func DebugPrint(f func(error)) option {
 	return func(o *options) {
-		o.debugPrinter = f
+		o.debugPrint = f
 	}
 }
 
@@ -45,10 +45,10 @@ func IgnoreError(f func(error) bool) option {
 	}
 }
 
-// TimePrinter prints sleepting time
+// TimePrint prints sleepting time
 // default: "waiting ?s..."
-func TimePrinter(f func(time.Duration)) option {
+func TimePrint(f func(time.Duration)) option {
 	return func(o *options) {
-		o.timePrinter = f
+		o.timePrint = f
 	}
 }
