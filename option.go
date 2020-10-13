@@ -10,6 +10,7 @@ type options struct {
 	debugMode    bool
 	debugPrinter func(error)
 	ignoreError  func(error) bool
+	timePrinter  func(time.Duration)
 }
 
 type option func(*options)
@@ -41,5 +42,13 @@ func DebugPrinter(f func(error)) option {
 func IgnoreError(f func(error) bool) option {
 	return func(o *options) {
 		o.ignoreError = f
+	}
+}
+
+// TimePrinter prints sleepting time
+// default: "waiting ?s..."
+func TimePrinter(f func(time.Duration)) option {
+	return func(o *options) {
+		o.timePrinter = f
 	}
 }
