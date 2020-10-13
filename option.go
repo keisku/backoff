@@ -44,6 +44,7 @@ func DebugPrint(f func(error)) Option {
 	}
 }
 
+// IgnoreError controls the error you want to interrupt the backoff
 func IgnoreError(f func(error) bool) Option {
 	return func(o *options) {
 		o.ignoreError = f
