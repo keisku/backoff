@@ -6,8 +6,10 @@ import (
 	"time"
 )
 
+// Commander .
 type Commander struct{ options }
 
+// NewCommander .
 func NewCommander(opts ...Option) Commander {
 	var (
 		defaultTimeout     = 1*time.Minute + 5*time.Second
@@ -35,6 +37,7 @@ func NewCommander(opts ...Option) Commander {
 	return Commander{options}
 }
 
+// Exec f() in the backoff
 func (cmd Commander) Exec(f func() error) error {
 	done := make(chan struct{})
 	go cmd.backoffLoop(done, f)
