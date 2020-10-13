@@ -13,35 +13,36 @@ type options struct {
 	timePrint   func(time.Duration)
 }
 
-type option func(*options)
+// Option enables customize the backoff
+type Option func(*options)
 
 // Timeout is to exit the backoff
-func Timeout(t time.Duration) option {
+func Timeout(t time.Duration) Option {
 	return func(o *options) {
 		o.timeout = t
 	}
 }
 
 // MaxWaitTime sets the maximum waiting time for the backoff interval
-func MaxWaitTime(t time.Duration) option {
+func MaxWaitTime(t time.Duration) Option {
 	return func(o *options) {
 		o.maxWaitTime = t
 	}
 }
 
-func DebugModeOn() option {
+func DebugModeOn() Option {
 	return func(o *options) {
 		o.debugMode = true
 	}
 }
 
-func DebugPrint(f func(error)) option {
+func DebugPrint(f func(error)) Option {
 	return func(o *options) {
 		o.debugPrint = f
 	}
 }
 
-func IgnoreError(f func(error) bool) option {
+func IgnoreError(f func(error) bool) Option {
 	return func(o *options) {
 		o.ignoreError = f
 	}
@@ -49,7 +50,7 @@ func IgnoreError(f func(error) bool) option {
 
 // TimePrint prints sleepting time
 // default: "waiting ?s..."
-func TimePrint(f func(time.Duration)) option {
+func TimePrint(f func(time.Duration)) Option {
 	return func(o *options) {
 		o.timePrint = f
 	}

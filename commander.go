@@ -8,7 +8,7 @@ import (
 
 type Commander struct{ options }
 
-func NewCommander(opts ...option) Commander {
+func NewCommander(opts ...Option) Commander {
 	var (
 		defaultTimeout     = 1*time.Minute + 5*time.Second
 		defaultMaxWaitTime = 32 * time.Second
