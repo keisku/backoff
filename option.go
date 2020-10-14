@@ -5,12 +5,13 @@ import (
 )
 
 type options struct {
-	timeout     time.Duration
-	maxWaitTime time.Duration
-	debugMode   bool
-	debugPrint  func(error)
-	ignoreError func(error) bool
-	timePrint   func(time.Duration)
+	timeout           time.Duration
+	timeoutErrMessage string
+	maxWaitTime       time.Duration
+	debugMode         bool
+	debugPrint        func(error)
+	ignoreError       func(error) bool
+	timePrint         func(time.Duration)
 }
 
 // Option enables customize the backoff
@@ -21,6 +22,14 @@ type Option func(*options)
 func Timeout(t time.Duration) Option {
 	return func(o *options) {
 		o.timeout = t
+	}
+}
+
+// TimeoutErrMessage is to be output on timeerror
+// default: "A timeout ends the exponential backoff"
+func TimeoutErrMessage(msg string) Option {
+	return func(o *options) {
+		o.timeoutErrMessage = msg
 	}
 }
 

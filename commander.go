@@ -12,10 +12,11 @@ type Commander struct{ options }
 // NewCommander .
 func NewCommander(opts ...Option) Commander {
 	var (
-		defaultTimeout     = 1*time.Minute + 5*time.Second
-		defaultMaxWaitTime = 32 * time.Second
-		defaultDebugMode   = false
-		defaultErrPrint    = func(err error) {
+		defaultTimeout       = 1*time.Minute + 5*time.Second
+		defaultTimeoutErrMsg = "A timeout ends the exponential backoff"
+		defaultMaxWaitTime   = 32 * time.Second
+		defaultDebugMode     = false
+		defaultErrPrint      = func(err error) {
 			fmt.Println(err)
 		}
 		defaultIgnoreError = func(error) bool { return false }
@@ -24,12 +25,13 @@ func NewCommander(opts ...Option) Commander {
 		}
 	)
 	options := options{
-		timeout:     defaultTimeout,
-		maxWaitTime: defaultMaxWaitTime,
-		debugMode:   defaultDebugMode,
-		debugPrint:  defaultErrPrint,
-		ignoreError: defaultIgnoreError,
-		timePrint:   defaultTimePrint,
+		timeout:           defaultTimeout,
+		timeoutErrMessage: defaultTimeoutErrMsg,
+		maxWaitTime:       defaultMaxWaitTime,
+		debugMode:         defaultDebugMode,
+		debugPrint:        defaultErrPrint,
+		ignoreError:       defaultIgnoreError,
+		timePrint:         defaultTimePrint,
 	}
 	for _, opt := range opts {
 		opt(&options)
@@ -46,7 +48,7 @@ func (cmd Commander) Exec(f func() error) error {
 	case <-done:
 		return nil
 	case <-time.After(cmd.timeout):
-		return errors.New("A timeout ends the exponential backoff")
+		return errors.New(cmd.timeoutErrMessage)
 	}
 }
 
