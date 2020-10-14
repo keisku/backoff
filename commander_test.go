@@ -34,7 +34,7 @@ func TestCommander_Exec(t *testing.T) {
 					return errors.New("internal server error")
 				},
 			},
-			wantErrMsg: "A timeout ends the exponential backoff",
+			wantErrMsg: "Ends the exponential backoff because of timeout",
 		},
 		{
 			name: "change output message when timeout",

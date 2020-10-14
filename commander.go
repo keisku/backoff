@@ -13,7 +13,7 @@ type Commander struct{ options }
 func NewCommander(opts ...Option) Commander {
 	var (
 		defaultTimeout       = 1*time.Minute + 5*time.Second
-		defaultTimeoutErrMsg = "A timeout ends the exponential backoff"
+		defaultTimeoutErrMsg = "Ends the exponential backoff because of timeout"
 		defaultMaxWaitTime   = 32 * time.Second
 		defaultDebugMode     = false
 		defaultErrPrint      = func(err error) {
