@@ -70,3 +70,10 @@ func TimePrint(f func(time.Duration)) Option {
 		o.timePrint = f
 	}
 }
+
+// DisabelTimePrint disables printing sleep time
+func DisabelTimePrint() Option {
+	return func(o *options) {
+		o.timePrint = func(t time.Duration) {}
+	}
+}
