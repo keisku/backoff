@@ -10,7 +10,7 @@ type options struct {
 	maxWaitTime       time.Duration
 	debugMode         bool
 	debugPrint        func(error)
-	ignoreError       func(error) bool
+	abortLoop         func(error) bool
 	timePrint         func(time.Duration)
 }
 
@@ -56,10 +56,10 @@ func DebugPrint(f func(error)) Option {
 	}
 }
 
-// IgnoreError controls the error you want to interrupt the backoff
-func IgnoreError(f func(error) bool) Option {
+// AbortLoop aborts backoff loop when a specific error occurs
+func AbortLoop(f func(error) bool) Option {
 	return func(o *options) {
-		o.ignoreError = f
+		o.abortLoop = f
 	}
 }
 

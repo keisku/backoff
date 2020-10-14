@@ -70,6 +70,29 @@ No messages during exponential backoff loop.
 Ends the exponential backoff because of timeout
 ```
 
+### abort backoff loop
+
+The backoff loop is aborted when a specific error occurs.
+
+This example below prints nothing, exit 0.
+
+```go
+func alwaysErr() error {
+	return errors.New("internal server error")
+}
+
+func main() {
+	cmd := backoff.NewCommander(
+		backoff.AbortLoop(func(err error) {
+			return err.Error() == "internal server error"
+		}),
+	)
+	if timeoutErr := cmd.Exec(alwaysErr); timeoutErr != nil {
+		fmt.Println(timeoutErr)
+	}
+}
+```
+
 ### debug mode on
 
 if debug mode is on, prints errors when repeating `alwaysErr()`

@@ -52,17 +52,17 @@ func TestCommander_Exec(t *testing.T) {
 			wantErrMsg: "test",
 		},
 		{
-			name: "ignore specific error",
+			name: "aborts backoff loop when a specific error occurs",
 			fields: fields{
 				Opts: []backoff.Option{
-					backoff.IgnoreError(func(e error) bool {
-						return e.Error() == "ignored error"
+					backoff.AbortLoop(func(e error) bool {
+						return e.Error() == "please abort loop"
 					}),
 				},
 			},
 			args: args{
 				f: func() error {
-					return errors.New("ignored error")
+					return errors.New("please abort loop")
 				},
 			},
 			wantErrMsg: "",

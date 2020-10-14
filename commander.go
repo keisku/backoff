@@ -19,8 +19,8 @@ func NewCommander(opts ...Option) Commander {
 		defaultErrPrint      = func(err error) {
 			fmt.Println(err)
 		}
-		defaultIgnoreError = func(error) bool { return false }
-		defaultTimePrint   = func(d time.Duration) {
+		defaultAbortLoop = func(error) bool { return false }
+		defaultTimePrint = func(d time.Duration) {
 			fmt.Printf("waiting %fs...\n", d.Seconds())
 		}
 	)
@@ -30,7 +30,7 @@ func NewCommander(opts ...Option) Commander {
 		maxWaitTime:       defaultMaxWaitTime,
 		debugMode:         defaultDebugMode,
 		debugPrint:        defaultErrPrint,
-		ignoreError:       defaultIgnoreError,
+		abortLoop:         defaultAbortLoop,
 		timePrint:         defaultTimePrint,
 	}
 	for _, opt := range opts {
@@ -60,7 +60,7 @@ func (cmd Commander) backoffLoop(done chan struct{}, f func() error) {
 			done <- struct{}{}
 			return
 		}
-		if cmd.ignoreError(err) {
+		if cmd.abortLoop(err) {
 			if cmd.debugMode {
 				cmd.debugPrint(err)
 			}
