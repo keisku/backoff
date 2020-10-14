@@ -17,6 +17,7 @@ type options struct {
 type Option func(*options)
 
 // Timeout is to exit the backoff
+// default: 65 seconds
 func Timeout(t time.Duration) Option {
 	return func(o *options) {
 		o.timeout = t
@@ -24,6 +25,7 @@ func Timeout(t time.Duration) Option {
 }
 
 // MaxWaitTime sets the maximum waiting time for the backoff interval
+// default: 32 seconds
 func MaxWaitTime(t time.Duration) Option {
 	return func(o *options) {
 		o.maxWaitTime = t
@@ -31,6 +33,7 @@ func MaxWaitTime(t time.Duration) Option {
 }
 
 // DebugModeOn enables to print logs
+// default: debug mode is off
 func DebugModeOn() Option {
 	return func(o *options) {
 		o.debugMode = true
